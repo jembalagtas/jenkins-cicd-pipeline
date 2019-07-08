@@ -1,12 +1,11 @@
 node ('ansible'){
     deleteDir()
-    stage'Checkout'
+    stage'Build'
         checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], 
         doGenerateSubmoduleConfigurations: false, extensions: [], 
         submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', 
         url: 'https://github.com/jembim/spring-framework-petclinic.git']]]
 
-    stage'Build'
         sh "mvn clean package"
 
     stage'Unit Test'
