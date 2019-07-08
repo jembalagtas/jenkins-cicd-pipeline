@@ -17,6 +17,9 @@ node ('ansible'){
         sh "${scannerHome}/bin/sonar-scanner"
 
     stage'Publish'
-        sh "mv ${env.WORKSPACE}/target/petclinic.war ${env.WORKSPACE}/target/petclinic-${env.BUILD_ID}.war"
-        sh "curl -v -u admin:admin --upload-file ${env.WORKSPACE}/target/petclinic-${env.BUILD_ID}.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
+        sh "mv /workspace/pipeline/target/petclinic.war /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war"
+        sh "curl -v -u admin:admin --upload-file /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
+
+    stage'Deploy'
+        sh "echo 'Deploy'"
 }
