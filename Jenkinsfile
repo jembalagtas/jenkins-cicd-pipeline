@@ -13,10 +13,8 @@ node ('ansible'){
         sh "mvn test"
 
     stage'Code Quality'
-        def scannerHome = tool 'SonarScanner 2.4';
-        withSonarQubeEnv('SonarQube Server') {
-            sh "${scannerHome}/bin/sonar-scanner"
-        }
+        def scannerHome = tool 'SonarScanner';
+        sh "${scannerHome}/bin/sonar-scanner"
 
     stage'Publish'
         sh "mv ${env.WORKSPACE}/target/petclinic.war ${env.WORKSPACE}/target/petclinic-${env.BUILD_ID}.war"
