@@ -1,4 +1,4 @@
-node ('master'){
+node ('ansible'){
 
     stage'Checkout'
         checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], 
