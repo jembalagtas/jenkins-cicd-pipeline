@@ -8,4 +8,7 @@ node ('master'){
 
     stage'Build'
         sh "mvn clean package"
+
+    stage'Unit Testing'
+        sh "mvn test"
 }
