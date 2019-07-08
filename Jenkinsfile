@@ -9,7 +9,7 @@ node ('ansible'){
     stage'Build'
         sh "mvn clean package"
 
-    stage'Unit Testing'
+    stage'Unit Test'
         sh "mvn test"
 
     stage'Code Quality'
