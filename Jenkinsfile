@@ -14,5 +14,5 @@ node ('ansible'){
 
     stage'Publish'
         sh "mv /workspace/petclinic/target/petclinic.war /workspace/petclinic/target/petclinic-${env.BUILD_ID}.war"
-        sh "curl -v -u admin:admin --upload-file /workspace/petclinic/target/petclinic.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
+        sh "curl -v -u admin:admin --upload-file /workspace/petclinic/target/petclinic-${env.BUILD_ID}.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
 }
