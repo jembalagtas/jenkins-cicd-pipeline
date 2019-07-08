@@ -13,5 +13,6 @@ node ('ansible'){
         sh "mvn test"
 
     stage'Publish'
+        sh "mv /workspace/petclinic/target/petclinic.war /workspace/petclinic/target/petclinic-${BUILD_NUMBER}.war"
         sh "curl -v -u admin:admin --upload-file /workspace/petclinic/target/petclinic.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${BUILD_NUMBER}.war"
 }
