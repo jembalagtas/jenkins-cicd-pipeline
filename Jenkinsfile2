@@ -1,0 +1,33 @@
+node ('ansible'){
+    deleteDir()
+    stage'Build'
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], 
+        doGenerateSubmoduleConfigurations: false, extensions: [], 
+        submoduleCfg: [], 
+        userRemoteConfigs: [[credentialsId: 'adop-jenkins-master', url: 'git@gitlab:root/spring-framework-petclinic.git']]]
+
+        sh "mvn clean package"
+
+    stage'Unit Test'
+        sh "mvn test"
+
+    stage'Code Quality'
+        def scannerHome = tool 'SonarScanner';
+        sh "${scannerHome}/bin/sonar-scanner"
+
+    stage'Publish'
+        sh "mv /workspace/pipeline/target/petclinic.war /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war"
+        sh "curl -v -u admin:admin --upload-file /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
+
+    stage'Deploy'
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], 
+        doGenerateSubmoduleConfigurations: false, 
+        extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansible']], submoduleCfg: [], 
+        userRemoteConfigs: [[credentialsId: 'adop-jenkins-master', url: 'git@gitlab:root/ansible-cicd-pipeline.git']]]
+
+        sh """
+        echo "wdcdmzyz22033182" > /workspace/pipeline/ansible/hosts
+        cd /workspace/pipeline/ansible
+        ansible-playbook -i hosts -u jembalagtas --become --become-user root -e "target=wdcdmzyz22033182 build_id=${env.BUILD_ID}" master.yml
+        """
+}
