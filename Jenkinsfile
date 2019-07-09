@@ -20,5 +20,14 @@ node ('ansible'){
         sh "curl -v -u admin:admin --upload-file /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war http://wdcdmzyz22033182.ibmcloud.dst.ibm.com/nexus/content/repositories/PETCLINIC/petclinic-${env.BUILD_ID}.war"
 
     stage'Deploy'
-        sh "echo 'Deploy'"
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], 
+        doGenerateSubmoduleConfigurations: false, 
+        extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansible']], 
+        submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jembim/ansible-cicd-pipeline.git']]]
+
+        sh """
+        echo "wdcdmzyz22033182" > /workspace/pipeline/ansible/hosts
+        cd /workspace/pipeline/ansible
+        ansible-playbook -i hosts -u jembalagtas --become --become-user root -e "target=wdcdmzyz22033182 build_id=${env.BUILD_ID}" master.yml
+        """
 }
