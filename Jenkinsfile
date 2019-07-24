@@ -8,7 +8,7 @@ node ('ansible'){
 
         // sh "mvn clean package"
         sh "echo 'Building'"
-        sh "sleep 20"
+        sh "sleep 30"
         
 
     stage'Unit Test'
@@ -20,7 +20,7 @@ node ('ansible'){
         // def scannerHome = tool 'SonarScanner';
         // sh "${scannerHome}/bin/sonar-scanner"
         sh "echo 'Static Code Analysis'"
-        sh "sleep 20"
+        sh "sleep 40"
 
     stage'Publish'
         // sh "mv /workspace/pipeline/target/petclinic.war /workspace/pipeline/target/petclinic-${env.BUILD_ID}.war"
